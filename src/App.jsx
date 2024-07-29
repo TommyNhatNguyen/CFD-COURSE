@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, HashRouter, Route, Routes } from "react-router-dom";
 import PATHS from "./constants/paths";
 import MainLayout from "./layouts/MainLayout";
 // import HomePage from "./pages/HomePage";
@@ -47,7 +47,7 @@ const MyPayment = lazy(() =>
 function App() {
   return (
     <Suspense fallback={<PageLoading />}>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route path={PATHS.HOME} element={<MainLayout />}>
             <Route index element={<HomePage />} />
@@ -77,7 +77,7 @@ function App() {
             <Route path="*" element={<NotFoundPage />} />
           </Route>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
       //{" "}
     </Suspense>
   );
