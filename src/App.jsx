@@ -47,7 +47,7 @@ const MyPayment = lazy(() =>
 function App() {
   return (
     <Suspense fallback={<PageLoading />}>
-      <HashRouter>
+      <BrowserRouter>
         <Routes>
           <Route path={PATHS.HOME} element={<MainLayout />}>
             <Route index element={<HomePage />} />
@@ -77,7 +77,7 @@ function App() {
             <Route path="*" element={<NotFoundPage />} />
           </Route>
         </Routes>
-      </HashRouter>
+      </BrowserRouter>
       //{" "}
     </Suspense>
   );
