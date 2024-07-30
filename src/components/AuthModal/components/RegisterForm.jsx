@@ -37,18 +37,27 @@ const RegisterForm = () => {
     const errorObject = {};
     // Start validate
     if (!!!form.name) {
-      errorObject.name = "Vui lòng điền họ và tên";
+      errorObject.name = "Vui lòng nhập họ và tên";
     }
     if (!!!form.email) {
-      errorObject.email = "Vui lòng điền email";
+      errorObject.email = "Vui lòng nhập email";
     } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(form.email)) {
       errorObject.email = "Email không đúng định dạng";
     }
     if (!!!form.password) {
-      errorObject.password = "Vui lòng điền mật khẩu";
+      errorObject.password = "Vui lòng nhập mật khẩu";
+    } else if (!!!(form.password.length >= 6)) {
+      errorObject.password = "Mật khẩu có ít nhất 6 ký tự";
+    } else if (!!!/[A-Z]/g.test(form.password)) {
+      errorObject.password = "Mật khẩu có ít nhất 1 chữ in hoa";
+    } else if (!!!/[^A-Za-z0-9]/.test(form.password)) {
+      errorObject.password = "Mật khẩu có ít nhất 1 ký tự đặc biệt";
+    } else if (!!!/[0-9]/g.test(form.password)) {
+      errorObject.password = "Mật khẩu có ít nhất 1 chữ số";
     }
+
     if (!!!form.confirmPassword) {
-      errorObject.confirmPassword = "Vui lòng điền xác nhận mật khẩu";
+      errorObject.confirmPassword = "Vui lòng xác nhận mật khẩu";
     } else if (form.password !== form.confirmPassword) {
       errorObject.confirmPassword = "Mật khẩu không khớp";
       errorObject.password = "Mật khẩu không khớp";

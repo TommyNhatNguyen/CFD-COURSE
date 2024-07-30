@@ -14,7 +14,6 @@ const MyInfo = () => {
     introduce: "",
   });
   const { profile, handleUpdateProfile } = useAuthContext();
-  const [isUpdated, setIsUpdated] = useState(false);
   const [form, setForm] = useState(initialForm.current);
   useEffect(() => {
     const newForm = {
@@ -34,12 +33,12 @@ const MyInfo = () => {
       e.preventDefault();
       const errorObject = {};
       if (!!!form.firstName) {
-        errorObject.firstName = "Họ và tên không được để trống";
+        errorObject.firstName = "Vui lòng nhập họ và tên";
       }
       if (!!!form.phone) {
-        errorObject.phone = "Điện thoại không được để trống";
+        errorObject.phone = "Vui lòng nhập số điện thoại";
       } else if (!/(84|0[2|3|5|7|8|9])+([0-9]{8})\b/g.test(form.phone)) {
-        errorObject.phone = "Điện thoại không đúng định dạng";
+        errorObject.phone = "Số điện thoại không đúng định dạng";
       }
       if (
         form.facebookURL &&
@@ -47,7 +46,7 @@ const MyInfo = () => {
           form.facebookURL
         )
       ) {
-        errorObject.facebookURL = "Vui lòng nhập đúng định dạng website";
+        errorObject.facebookURL = "Website không đúng định dạng";
       }
 
       if (
@@ -56,14 +55,13 @@ const MyInfo = () => {
           form.website
         )
       ) {
-        errorObject.website = "Vui lòng nhập đúng định dạng website";
+        errorObject.website = "Website không đúng định dạng";
       }
 
       setError(errorObject);
       if (Object.keys(errorObject)?.length > 0) {
         console.log("error", errorObject);
       } else {
-        setIsUpdated(true);
         handleUpdateProfile?.(form);
       }
     },
@@ -154,9 +152,7 @@ const MyInfo = () => {
             {...register("introduce")}
           />
         </div>
-        {isUpdated && !isFormChanged && (
-          <p className="noti">Cập nhận thông tin thành công</p>
-        )}
+
         <div className="form-group">
           <div className="btnsubmit">
             <Button

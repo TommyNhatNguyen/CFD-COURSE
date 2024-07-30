@@ -1,15 +1,22 @@
 import { Empty } from "antd";
 import React, { useState } from "react";
+import { StyledAccordion } from "../StyledComponents/StyledAccordion";
 
 const Accordion = ({ label = "", data = [], defaultActiveIndex = -1 }) => {
   const [activeIndex, setActiveIndex] = useState(defaultActiveIndex);
-
   return (
-    <div className="accordion">
+    <StyledAccordion className="accordion">
       {!!label && <h3 className="accordion__title label">{label}</h3>}
       {data?.length > 0 ? (
         data.map((item, index) => {
           const { id, title, content } = item || {};
+          let modContent;
+          if (Array.isArray(content)) {
+            modContent = content?.join("\r\n");
+            console.log("modContent", modContent);
+          } else {
+            modContent = content?.trim();
+          }
           return (
             <div
               key={id || index}
@@ -28,7 +35,11 @@ const Accordion = ({ label = "", data = [], defaultActiveIndex = -1 }) => {
                   <strong>{title || ""}</strong>
                 </h4>
               </div>
-              <div className="accordion__content-text">{content || ""}</div>
+              <div className="accordion__content-text">
+                {modContent?.length > 0
+                  ? modContent
+                  : "Nội dung chưa được cập nhật"}
+              </div>
             </div>
           );
         })
@@ -38,7 +49,7 @@ const Accordion = ({ label = "", data = [], defaultActiveIndex = -1 }) => {
           style={{ margin: "0 auto" }}
         />
       )}
-    </div>
+    </StyledAccordion>
   );
 };
 

@@ -15,11 +15,13 @@ export const AuthContextProvider = ({ children }) => {
   const handleShowModal = (modalType) => {
     if (!!!tokenMethod.get()) {
       setModalShow(modalType || "");
+      document.body.classList.add("fixed");
     }
   };
   const handleCloseModal = (e) => {
     e?.stopPropagation();
     setModalShow("");
+    document.body.classList.remove("fixed");
   };
   useEffect(() => {
     if (tokenMethod.get()) {

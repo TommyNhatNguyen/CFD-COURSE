@@ -10,18 +10,20 @@ import useQuery from "../../hooks/useQuery";
 import courseService from "../../services/courseService";
 import questionService from "../../services/questionService";
 import useMutation from "../../hooks/useMutation";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { ROLES } from "../../constants/role";
 import { formatCurrency, formatDate } from "../../utils/format";
 import useDebounce from "../../hooks/useDebounce";
 import { useAuthContext } from "../../context/AuthContext";
 import PageLoading from "../../components/PageLoading";
+import tokenMethod from "../../utils/token";
 
 const CourseDetailPage = () => {
   // Get params
   const { courseSlug } = useParams();
-  const { courseInfo } = useAuthContext();
+  const { courseInfo, profile } = useAuthContext();
   const [isAlreadySignUp, setIsAlreadySignUp] = useState("");
+  const isLogin = !!profile;
   // Call API
   const { data: coursesData, loading: coursesLoading } = useQuery(
     courseService.getCourse
@@ -61,6 +63,7 @@ const CourseDetailPage = () => {
   // Debounce
   const apiLoading = coursesLoading || questionsLoading || courseDetailLoading;
   const pageLoading = useDebounce(apiLoading, 500);
+  console.log("first");
   if (pageLoading) {
     return <PageLoading />;
   }

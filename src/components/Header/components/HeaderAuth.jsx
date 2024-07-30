@@ -4,52 +4,45 @@ import { MODAL_TYPES } from "../../../constants/general";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import PATHS from "../../../constants/paths";
 import { useMainContext } from "../../../context/MainContext";
+import styled from "styled-components";
+import { StyledButtonModal } from "../../StyledComponents/StyledButtonModal";
 
-const HeaderAuth = () => {
+const HeaderAuth = ({ handleShowDropDown, isDropDown }) => {
   const { handleShowModal, profile, handleLogout } = useAuthContext();
-  const { showNavBar } = useMainContext();
-  const [isDropDown, setIsDropDown] = useState(false);
-  const currentPath = useLocation().pathname;
-  useEffect(() => {
-    setIsDropDown?.(false);
-    if (showNavBar) {
-      setIsDropDown?.(false);
-    }
-  }, [currentPath, showNavBar]);
-  // useEffect(() => {
-  //   if (showNavBar) {
-  //     setIsDropDown?.(false);
-  //   }
-  // }, [showNavBar]);
   const _onShowModal = (modalType) => {
     handleShowModal?.(modalType);
   };
-
   const _onClickDropDown = (e) => {
     e.stopPropagation();
-    setIsDropDown((prev) => !prev);
+    handleShowDropDown((prev) => !prev);
   };
   const _handleLogout = () => {
     handleLogout();
-    setIsDropDown(false);
+    handleShowDropDown();
   };
 
   return (
     <>
       {!!!profile ? (
         <div className="header__auth">
-          <a
+          <StyledButtonModal
             // href="javascript:void(0)"
             className="btn btn--transparent btnmodal"
             data-modal="mdlogin"
           >
-            <span onClick={() => _onShowModal(MODAL_TYPES.register)}>
+            <span
+              className="register"
+              onClick={() => _onShowModal(MODAL_TYPES.register)}
+            >
               Đăng ký /&nbsp;
             </span>
-            <span onClick={() => _onShowModal(MODAL_TYPES.login)}>
+            <span
+              className="login"
+              onClick={() => _onShowModal(MODAL_TYPES.login)}
+            >
               Đăng nhập
             </span>
-          </a>
+          </StyledButtonModal>
         </div>
       ) : (
         <div className="header__logged">
@@ -60,7 +53,7 @@ const HeaderAuth = () => {
               onClick={_onClickDropDown}
             >
               <div className="userlogged__avatar-img user__img">
-                <img src="/img/avatar_nghia.jpg" alt="Avatar teacher" />
+                <img src="/img/default-user-icon.jpg" alt="Avatar teacher" />
               </div>
               <i className="userlogged__avatar-icon">
                 <svg
@@ -81,7 +74,7 @@ const HeaderAuth = () => {
             >
               <div className="userlogged__dropdown-info">
                 <div className="user__img">
-                  <img src="/img/avatar_nghia.jpg" alt="Avatar teacher" />
+                  <img src="/img/default-user-icon.jpg" alt="Avatar teacher" />
                 </div>
                 <NavLink
                   end

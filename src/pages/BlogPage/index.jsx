@@ -1,6 +1,51 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import useQuery from "../../hooks/useQuery";
+import blogService from "../../services/blogService";
+import useMutation from "../../hooks/useMutation";
+import { Empty, Skeleton, Space } from "antd";
+import PATHS from "../../constants/paths";
+import { Link } from "react-router-dom";
+import { formatDate } from "../../utils/format";
+import useDebounce from "../../hooks/useDebounce";
 
 const BlogPage = () => {
+  const [blogs, setBlogs] = useState();
+  const [selectedCategoryId, setSelectedCategoryId] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const { data: blogData, loading: blogLoading } = useQuery(
+    blogService.getBlogs
+  );
+  const { data: blogCategoriesData, loading: blogCategoriesLoading } = useQuery(
+    blogService.getBlogCategoires
+  );
+  const blogsAll = blogData?.blogs || [];
+  const blogCategories = blogCategoriesData?.blogs || [];
+  const ITEMS_PER_PAGE = 6;
+  const totalPages = Math.ceil(blogs?.length / ITEMS_PER_PAGE) || 0;
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const currentBlogs = blogs?.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const loading = blogLoading || blogCategoriesLoading;
+  const apiLoading = useDebounce(loading, 500);
+  // First render show all posts
+  useEffect(() => {
+    setBlogs(blogsAll);
+  }, [blogData]);
+  // Handle get blog by category
+  const handleGetBlogByCategory = function (e) {
+    e.preventDefault();
+    setSelectedCategoryId(e.target.id);
+    if (e.target.id !== "all") {
+      setBlogs(blogsAll?.filter((blog) => blog?.category?.id === e.target.id));
+    } else {
+      setBlogs(blogsAll);
+    }
+  };
+  // Handle page change
+  const handlePageChange = (page) => {
+    if (page > 0 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
   return (
     <main className="mainwrapper blog --ptop">
       <div className="container">
@@ -10,222 +55,145 @@ const BlogPage = () => {
           </div>
         </div>
         <div className="blog__menu">
-          <a href="#" className="blog__menu-item active">
+          <a
+            id="all"
+            href="#"
+            className={`blog__menu-item ${
+              selectedCategoryId === "all" ? "active" : ""
+            }`}
+            onClick={handleGetBlogByCategory}
+          >
             Tất cả
           </a>
-          <a href="#" className="blog__menu-item">
-            Tin tức
-          </a>
-          <a href="#" className="blog__menu-item">
-            Dev
-          </a>
-          <a href="#" className="blog__menu-item">
-            Design
-          </a>
-          <a href="#" className="blog__menu-item">
-            Tài Nguyên
-          </a>
+          {blogCategories?.length > 0 &&
+            blogCategories?.map((category, index) => {
+              return (
+                <a
+                  key={category?.id || index}
+                  href="#"
+                  id={category?.id || index}
+                  className={`blog__menu-item ${
+                    selectedCategoryId === category?.id ? "active" : ""
+                  }`}
+                  onClick={handleGetBlogByCategory}
+                >
+                  {category?.name || ""}
+                </a>
+              );
+            })}
         </div>
         <div className="blog__list">
-          <div className="blog__list-item">
-            <div className="img">
-              <a href="blog-detail.html">
-                <img
-                  src="https://cfdcircle.vn/files/thumbnails/JuQE6Rd3DGuiHJOpgEb3Jg1KoLoa25OlLrl1pDQa.jpg"
-                  alt="Khóa học CFD"
-                  className="course__thumbnail"
-                />
-              </a>
-            </div>
-            <div className="content">
-              <p className="label">Tài nguyên</p>
-              <h2 className="title --t3">
-                <a href="blog-detail.html">
-                  Top 5 bản thiết kế landing page figma miễn phí dành cho
-                  front-end dev và designer
-                </a>
-              </h2>
-              <div className="content__info">
-                <div className="user">
-                  <div className="user__img">
-                    <img src="img/avatar_nghia.jpg" alt="Avatar teacher" />
+          {apiLoading &&
+            Array(ITEMS_PER_PAGE)
+              .fill("")
+              .map((_, index) => (
+                <div className="blog__list-item">
+                  <div className="img">
+                    <a>
+                      <Skeleton.Image
+                        active
+                        className="course__thumbnail"
+                        style={{
+                          maxWidth: "100%",
+                          minWidth: "100%",
+                          minHeight: "100%",
+                          objectFit: "cover",
+                          position: "absolute",
+                          top: "50%",
+                          left: "50%",
+                          transform: "translate(-50%,-50%)",
+                          WebkitTransform: "translate(-50%,-50%)",
+                        }}
+                      />
+                    </a>
                   </div>
-                  <p className="user__name">Trần Nghĩa</p>
-                </div>
-                <div className="date">10/12/2022</div>
-              </div>
-            </div>
-          </div>
-          <div className="blog__list-item">
-            <div className="img">
-              <a href="blog-detail.html">
-                <img
-                  src="https://cfdcircle.vn/files/thumbnails/ebQvh5lMnPglamK4Q8DDWdoyzTnHLcDej5KJnlJh.jpg"
-                  alt="Khóa học CFD"
-                  className="course__thumbnail"
-                />
-              </a>
-            </div>
-            <div className="content">
-              <p className="label">Dev</p>
-              <h2 className="title --t3">
-                <a href="blog-detail.html">
-                  Xây dựng portfolio cá nhân để thành công trong sự nghiệp của
-                  bạn
-                </a>
-              </h2>
-              <div className="content__info">
-                <div className="user">
-                  <div className="user__img">
-                    <img src="img/avatar_nghia.jpg" alt="Avatar teacher" />
+                  <div className="content">
+                    <Skeleton active />
                   </div>
-                  <p className="user__name">Trần Nghĩa</p>
                 </div>
-                <div className="date">10/12/2022</div>
-              </div>
-            </div>
-          </div>
-          <div className="blog__list-item">
-            <div className="img">
-              <a href="blog-detail.html">
-                <img
-                  src="https://cfdcircle.vn/files/thumbnails/ZXjS4gWbyeJ95CrLVUTwZI90CQQwBIrDI9Ik64sq.jpg"
-                  alt="Khóa học CFD"
-                  className="course__thumbnail"
-                />
-              </a>
-            </div>
-            <div className="content">
-              <p className="label">Dev</p>
-              <h2 className="title --t3">
-                <a href="blog-detail.html">
-                  ReactJS là gì? Tại sao ReactJs là thư viện Javascript phổ biến
-                  nhất hiện nay
-                </a>
-              </h2>
-              <div className="content__info">
-                <div className="user">
-                  <div className="user__img">
-                    <img src="img/avatar_nghia.jpg" alt="Avatar teacher" />
+              ))}
+          {!apiLoading &&
+            currentBlogs?.length > 0 &&
+            currentBlogs?.map((blog, index) => {
+              return (
+                <div key={blog?.id || index} className="blog__list-item">
+                  <div className="img">
+                    <Link to={`${PATHS.BLOG.INDEX}/${blog?.slug || ""}`}>
+                      <img
+                        src={blog?.image || "/img/default-image.jpg"}
+                        alt="Khóa học CFD"
+                        className="course__thumbnail"
+                      />
+                    </Link>
                   </div>
-                  <p className="user__name">Trần Nghĩa</p>
-                </div>
-                <div className="date">10/12/2022</div>
-              </div>
-            </div>
-          </div>
-          <div className="blog__list-item">
-            <div className="img">
-              <a href="blog-detail.html">
-                <img
-                  src="https://cfdcircle.vn/files/thumbnails/ZettvAFqback8Jzxiyz3DVPjvkoBUhUJY94DJwSK.jpg"
-                  alt="Khóa học CFD"
-                  className="course__thumbnail"
-                />
-              </a>
-            </div>
-            <div className="content">
-              <p className="label">Dev</p>
-              <h2 className="title --t3">
-                <a href="blog-detail.html">
-                  18 xu hướng web animation nổi bật trong năm 2023
-                </a>
-              </h2>
-              <div className="content__info">
-                <div className="user">
-                  <div className="user__img">
-                    <img src="img/avatar_nghia.jpg" alt="Avatar teacher" />
+                  <div className="content">
+                    <p className="label">{blog?.category?.name || ""}</p>
+                    <h2 className="title --t3">
+                      <Link to={`${PATHS.BLOG.INDEX}/${blog?.slug || ""}`}>
+                        {blog?.name || ""}
+                      </Link>
+                    </h2>
+                    <div className="content__info">
+                      <div className="user">
+                        <div className="user__img">
+                          <img
+                            src="/img/default-user-icon.jpg"
+                            alt="Avatar teacher"
+                          />
+                        </div>
+                        <p className="user__name">{blog?.author || ""}</p>
+                      </div>
+                      <div className="date">{formatDate(blog?.createdAt)}</div>
+                    </div>
                   </div>
-                  <p className="user__name">Trần Nghĩa</p>
                 </div>
-                <div className="date">10/12/2022</div>
-              </div>
-            </div>
-          </div>
-          <div className="blog__list-item">
-            <div className="img">
-              <a href="blog-detail.html">
-                <img
-                  src="https://cfdcircle.vn/files/thumbnails/Tey1o9gldaFwCrCvQ0vgSDKuE6CKFYnBm4dWIVps.jpg"
-                  alt="Khóa học CFD"
-                  className="course__thumbnail"
-                />
-              </a>
-            </div>
-            <div className="content">
-              <p className="label">Dev</p>
-              <h2 className="title --t3">
-                <a href="blog-detail.html">
-                  Zustand - State Management là gì? Liệu có thể so sánh được với
-                  Redux hay không?
-                </a>
-              </h2>
-              <div className="content__info">
-                <div className="user">
-                  <div className="user__img">
-                    <img src="img/avatar_nghia.jpg" alt="Avatar teacher" />
-                  </div>
-                  <p className="user__name">Trần Nghĩa</p>
-                </div>
-                <div className="date">10/12/2022</div>
-              </div>
-            </div>
-          </div>
-          <div className="blog__list-item">
-            <div className="img">
-              <a href="blog-detail.html">
-                <img
-                  src="https://cfdcircle.vn/files/thumbnails/esliqep9bvqPUmju6zn1Cf6cFBBwNXhcZlwHcwtL.jpg"
-                  alt="Khóa học CFD"
-                  className="course__thumbnail"
-                />
-              </a>
-            </div>
-            <div className="content">
-              <p className="label">Dev</p>
-              <h2 className="title --t3">
-                <a href="blog-detail.html">
-                  Tất tần tật về Shorthands trong CSS
-                </a>
-              </h2>
-              <div className="content__info">
-                <div className="user">
-                  <div className="user__img">
-                    <img src="img/avatar_nghia.jpg" alt="Avatar teacher" />
-                  </div>
-                  <p className="user__name">Trần Nghĩa</p>
-                </div>
-                <div className="date">10/12/2022</div>
-              </div>
-            </div>
-          </div>
+              );
+            })}
         </div>
         <ul className="paging">
           <li>
-            <a href="#">
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                handlePageChange(currentPage - 1);
+              }}
+            >
               <i>
-                <img src="img/iconprev.svg" alt="icon" />
+                <img src="/img/iconprev.svg" alt="icon" />
               </i>
             </a>
           </li>
+          {totalPages > 0 &&
+            Array.from({ length: totalPages }, (_, i) => i + 1).map(
+              (page, index) => {
+                return (
+                  <li key={page || index}>
+                    <a
+                      className={page === currentPage ? "active" : ""}
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handlePageChange(page);
+                      }}
+                    >
+                      {page}
+                    </a>
+                  </li>
+                );
+              }
+            )}
+
           <li>
-            <a href="#" className="active">
-              1
-            </a>
-          </li>
-          <li>
-            <a href="#">2</a>
-          </li>
-          <li>
-            <a href="#">3</a>
-          </li>
-          <li>
-            <a href="#">4</a>
-          </li>
-          <li>
-            <a href="#">
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                handlePageChange(currentPage + 1);
+              }}
+            >
               <i>
-                <img src="img/iconprev.svg" alt="icon" />
+                <img src="/img/iconprev.svg" alt="icon" />
               </i>
             </a>
           </li>

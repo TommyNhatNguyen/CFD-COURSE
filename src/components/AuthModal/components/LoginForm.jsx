@@ -6,7 +6,7 @@ import ComponentLoading from "../../ComponentLoading";
 import { MODAL_TYPES } from "../../../constants/general";
 
 const LoginForm = () => {
-  const { handleShowModal, handleLogin } = useAuthContext();
+  const { handleShowModal, handleLogin, messageAPI } = useAuthContext();
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -28,12 +28,12 @@ const LoginForm = () => {
     const errorObject = {};
     // Start validate
     if (!!!form.email) {
-      errorObject.email = "Vui lòng điền email";
+      errorObject.email = "Vui lòng nhập email";
     } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(form.email)) {
       errorObject.email = "Email không đúng định dạng";
     }
     if (!!!form.password) {
-      errorObject.password = "Vui lòng điền mật khẩu";
+      errorObject.password = "Vui lòng nhập mật khẩu";
     }
     setError(errorObject);
     // End validate
@@ -49,6 +49,10 @@ const LoginForm = () => {
       });
     }
   };
+  const _onNotSupportSubmit = (e) => {
+    e.preventDefault();
+    messageAPI.warning("Tính năng chưa được hỗ trợ");
+  };
   return (
     <div className="modal__wrapper-content mdlogin active">
       {loading && <ComponentLoading />}
@@ -61,17 +65,17 @@ const LoginForm = () => {
         </div>
       </div>
       <div className="social">
-        <a className="btn btn--google" href="#">
+        <a onClick={_onNotSupportSubmit} className="btn btn--google" href="#">
           <i>
-            <img src="img/icon-google.svg" alt="Google CFD" />
+            <img src="/img/icon-google.svg" alt="Google CFD" />
           </i>
           <span>Đăng nhập bằng Google</span>
         </a>
-        <a className="btn btn--facebook" href="#">
+        <a onClick={_onNotSupportSubmit} className="btn btn--facebook" href="#">
           <i>
-            <img src="img/icon-facebook-v2.svg" alt="Google CFD" />
+            <img src="/img/icon-facebook-v2.svg" alt="Google CFD" />
           </i>
-          <span>Đăng nhập bằng Google</span>
+          <span>Đăng nhập bằng Facebook</span>
         </a>
       </div>
       <span className="line">Hoặc</span>
@@ -91,7 +95,7 @@ const LoginForm = () => {
           {...login("password")}
         />
         <div className="form__bottom">
-          <a className="color--primary" href="#">
+          <a onClick={_onNotSupportSubmit} className="color--primary" href="#">
             Quên mật khẩu?
           </a>
         </div>

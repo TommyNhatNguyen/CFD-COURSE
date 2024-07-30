@@ -14,7 +14,9 @@ const StudentProfilePage = () => {
                 <div className="avatar">
                   <div className="img">
                     <img
-                      src={profile?.profileImage || "/img/avatar_nghia.jpg"}
+                      src={
+                        profile?.profileImage || "/img/default-user-icon.jpg"
+                      }
                       alt="avatar"
                     />
                   </div>

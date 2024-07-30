@@ -26,8 +26,14 @@ const Button = ({
     case "default":
       variantClass = "btn btn--default";
       break;
+    case "google":
+      variantClass = "btn btn--google";
     default:
       break;
+  }
+
+  if (disabled) {
+    variantClass = "btn btn--grey";
   }
 
   if (!!link) {

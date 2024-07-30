@@ -18,7 +18,20 @@ const MyPayment = () => {
       {paymentInfo?.map((item, index) => {
         return (
           <div key={item?.id || index} className="itemhistory">
-            <div className="name">{item?.course?.name || ""}</div>
+            <div
+              className="name"
+              style={{
+                display: "-webkit-inline-box",
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: "vertical",
+                textOverflow: "ellipsis",
+                overflow: "hidden",
+                marginRight: "10px",
+                paddingBottom: "initial",
+              }}
+            >
+              {item?.course?.name || ""}
+            </div>
             <div className="payment">
               {PAYMENT_METHOD[item?.paymentMethod] || ""}
             </div>

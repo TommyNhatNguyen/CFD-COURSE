@@ -79,19 +79,19 @@ export const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="tel:0989596913">
+                <a href="tel:0909284493">
                   <i>
                     <img src="/img/icon-phone.svg" alt="icon" />
                   </i>
-                  <span>(+84) 98 9596 913</span>
+                  <span>090.928.4493</span>
                 </a>
               </li>
               <li>
-                <a href="mailto:info@cfdcircle.vn">
+                <a href="mailto:nguyenanhnhat123456@gmail.com">
                   <i>
                     <img src="/img/icon-mail.svg" alt="icon" />
                   </i>
-                  <span>info@cfdcircle.vn</span>
+                  <span>nguyenanhnhat123456@gmail.com</span>
                 </a>
               </li>
             </ul>

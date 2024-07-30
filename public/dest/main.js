@@ -223,27 +223,27 @@ $(document).ready(function () {
   // accordion();
 
   // ===================== BACKGROUND HEADER ==================
-  function setBgHeader(scrollY) {
-    let header = $("header");
-    if (scrollY > header.height()) {
-      header.addClass("--bgwhite");
-    } else {
-      header.removeClass("--bgwhite");
-    }
-  }
-  function scrollBgHeader() {
-    let scrollY = $(window).scrollTop();
-    if ($(".header").hasClass("--transparent")) {
-      setBgHeader(scrollY);
-    }
-    hideDropDown();
-  }
-  scrollBgHeader();
+  // function setBgHeader(scrollY) {
+  //   let header = $("header");
+  //   if (scrollY > header.height()) {
+  //     header.addClass("--bgwhite");
+  //   } else {
+  //     header.removeClass("--bgwhite");
+  //   }
+  // }
+  // function scrollBgHeader() {
+  //   let scrollY = $(window).scrollTop();
+  //   if ($(".header").hasClass("--transparent")) {
+  //     setBgHeader(scrollY);
+  //   }
+  //   hideDropDown();
+  // }
+  // scrollBgHeader();
 
   // ================= WINDOW SCROLL ========================
-  $(window).scroll(function () {
-    scrollBgHeader();
-  });
+  // $(window).scroll(function () {
+  //   scrollBgHeader();
+  // });
 
   // ============== DOCUMENT CLICKED ========================
   $(document).click(function () {
@@ -303,10 +303,10 @@ $(document).ready(function () {
   // coursePage();
 
   // ========================= DROPDOWN ===========================
-  function hideDropDown() {
-    let dropdown = $(".dropdown");
-    dropdown.removeClass("active");
-  }
+  // function hideDropDown() {
+  //   let dropdown = $(".dropdown");
+  //   dropdown.removeClass("active");
+  // }
   // function dropDown() {
   //   let btndropdown = $("[data-dropdown]"),
   //     dropdown = $(".dropdown");

@@ -1,22 +1,28 @@
-import { BrowserRouter, HashRouter, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  HashRouter,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 import PATHS from "./constants/paths";
 import MainLayout from "./layouts/MainLayout";
 // import HomePage from "./pages/HomePage";
 // import CoursesPage from "./pages/CoursesPage";
 // import CourseOrderPage from "./pages/CourseOrderPage";
 // import BlogPage from "./pages/BlogPage";
-// import StudentProfilePage from "./pages/StudentProfilePage";
+import StudentProfilePage from "./pages/StudentProfilePage";
 // import PaymentMethodPage from "./pages/PaymentMethodPage";
 // import ContactPage from "./pages/ContactPage";
 // import PrivacyPage from "./pages/PrivacyPage";
 // import NotFoundPage from "./pages/NotFoundPage";
 // import AboutPage from "./pages/AboutPage";
-// import MyInfo from "./pages/StudentProfilePage/components/MyInfo";
-// import MyCourse from "./pages/StudentProfilePage/components/MyCourse";
-// import MyPayment from "./pages/StudentProfilePage/components/MyPayment";
+import MyInfo from "./pages/StudentProfilePage/components/MyInfo";
+import MyCourse from "./pages/StudentProfilePage/components/MyCourse";
+import MyPayment from "./pages/StudentProfilePage/components/MyPayment";
 // import CourseDetailPage from "./pages/CourseDetailPage";
 // import BlogDetailPage from "./pages/BlogDetailPage";
-// import PrivateRoute from "./components/PrivateRoute";
+import PrivateRoute from "./components/PrivateRoute";
 import { Suspense, lazy } from "react";
 import PageLoading from "./components/PageLoading";
 
@@ -25,7 +31,7 @@ const HomePage = lazy(() => import("./pages/HomePage"));
 const CoursesPage = lazy(() => import("./pages/CoursesPage"));
 const CourseOrderPage = lazy(() => import("./pages/CourseOrderPage"));
 const BlogPage = lazy(() => import("./pages/BlogPage"));
-const StudentProfilePage = lazy(() => import("./pages/StudentProfilePage"));
+// const StudentProfilePage = lazy(() => import("./pages/StudentProfilePage"));
 const PaymentMethodPage = lazy(() => import("./pages/PaymentMethodPage"));
 const ContactPage = lazy(() => import("./pages/ContactPage"));
 const PrivacyPage = lazy(() => import("./pages/PrivacyPage"));
@@ -33,16 +39,16 @@ const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 const AboutPage = lazy(() => import("./pages/AboutPage"));
 const CourseDetailPage = lazy(() => import("./pages/CourseDetailPage"));
 const BlogDetailPage = lazy(() => import("./pages/BlogDetailPage"));
-const PrivateRoute = lazy(() => import("./components/PrivateRoute"));
-const MyInfo = lazy(() =>
-  import("./pages/StudentProfilePage/components/MyInfo")
-);
-const MyCourse = lazy(() =>
-  import("./pages/StudentProfilePage/components/MyCourse")
-);
-const MyPayment = lazy(() =>
-  import("./pages/StudentProfilePage/components/MyPayment")
-);
+// const PrivateRoute = lazy(() => import("./components/PrivateRoute"));
+// const MyInfo = lazy(() =>
+//   import("./pages/StudentProfilePage/components/MyInfo")
+// );
+// const MyCourse = lazy(() =>
+//   import("./pages/StudentProfilePage/components/MyCourse")
+// );
+// const MyPayment = lazy(() =>
+//   import("./pages/StudentProfilePage/components/MyPayment")
+// );
 
 function App() {
   return (
@@ -78,7 +84,6 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
-      //{" "}
     </Suspense>
   );
 }
